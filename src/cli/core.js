@@ -180,6 +180,16 @@ program
       });
   });
 
+program
+  .command("document")
+  .description("show doc link")
+  .action(() => {
+    console.log(
+      chalk.green(
+        "https://www.notion.so/kunsam624/xk-scripter-25dfe18afc854797bde47024a43fedbb"
+      )
+    );
+  });
 program.version(PACKAGE_VERSION, "-v, --vers", "output the current version");
 
 program.parse(process.argv);
