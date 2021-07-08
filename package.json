@@ -1,0 +1,52 @@
+{
+  "name": "xk-scripter",
+  "version": "0.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "engine": {
+    "node": ">=5.1"
+  },
+  "scripts": {
+    "reset": "npm run build && git add . && git commit -m reset &&npm run publish:patch",
+    "start": "npm run build:watch",
+    "build": "npm run clean && babel src -d lib",
+    "build:watch": "babel src --watch -d lib",
+    "clean": "rimraf lib",
+    "publish:patch": "npm version patch && npm publish",
+    "publish:minor": "npm version minor && npm publish",
+    "dot": "NODE_ENV=node npx babel src/cli/create-snippet.js",
+    "update-cli": "NODE_ENV=node npx babel scripts/bin/update-cli.js",
+    "test-cli": "NODE_ENV=node npx babel-node scripts/bin/test-cli.js"
+  },
+  "author": "kunsam",
+  "license": "MIT",
+  "dependencies": {
+    "babel-preset-es2017": "^6.24.1",
+    "babel-preset-latest": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-3": "^6.24.1",
+    "chalk": "^2.4.2",
+    "commander": "^8.0.0",
+    "fs-extra": "^4.0.2",
+    "lodash": "^4.17.4",
+    "readline-sync": "^1.4.10",
+    "rimraf": "^2.6.2",
+    "shelljs": "^0.7.8",
+    "xks-git": "0.0.7"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.6",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-plugin-transform-require-ignore": "^0.1.1",
+    "babel-plugin-transform-runtime": "^6.23.0"
+  },
+  "bin": {
+    "XKS": "bin/core.js",
+    "XKS-check-core": "bin/core-check-core.js",
+    "XKS-ccr": "bin/core-check-core.js",
+    "XKS-check-assist-center": "bin/core-check-assist-center.js",
+    "XKS-cac": "bin/core-check-assist-center.js"
+  }
+}
