@@ -116,6 +116,8 @@ program
         if (erroMsg) {
           console.log(chalk.yellow("gsave error", erroMsg));
           return;
+        } else {
+          console.log(chalk.yellow("gsave success"));
         }
       })
       .catch((e) => {
