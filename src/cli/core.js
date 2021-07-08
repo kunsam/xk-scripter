@@ -24,7 +24,7 @@ async function selectDirs(baseDir, dirs, title) {
   let selectedDirs = [];
   if (selectedIndexes.length) {
     selectedIndexes.forEach((indx) => {
-      selectedDirs.push(dirs[indx]);
+      selectedDirs.push(allDirs[indx]);
     });
   }
   return selectedDirs;
@@ -74,6 +74,7 @@ program
     "[selectable] checkout <branchname> for all module project in current directory"
   )
   .action((branchname) => {
+    const baseDir = shell.pwd().stdout;
     gco(baseDir, branchname, async (dirs) => {
       return await selectDirs(baseDir, dirs, "请选择需要切换的project: ");
     })
@@ -93,6 +94,7 @@ program
     "checkout <branchname> for all module project in current directory"
   )
   .action((branchname) => {
+    const baseDir = shell.pwd().stdout;
     gcoa(baseDir, branchname)
       .then((success) => {
         if (success) {
@@ -181,7 +183,7 @@ program
   });
 
 program
-  .command("document")
+  .command("document_link")
   .description("show doc link")
   .action(() => {
     console.log(
