@@ -22,6 +22,7 @@ async function selectDirs(baseDir, dirs, title) {
     title
   );
   let selectedDirs = [];
+  console.log(title, selectedIndexes, "selectedIndexes");
   if (selectedIndexes.length) {
     selectedIndexes.forEach((indx) => {
       selectedDirs.push(allDirs[indx]);

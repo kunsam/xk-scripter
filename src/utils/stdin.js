@@ -15,7 +15,7 @@ export async function getUserMultipleSelectedItems(list, title) {
   const seletedIndexes = inputText
     .replace(/，/g, ",")
     .split(",")
-    .filter((a) => !!a)
+    .filter((a) => a !== undefined)
     .map((text) => parseInt(text))
     .filter((a) => typeof a === "number")
     .map((n) => n - 1);
@@ -27,7 +27,7 @@ export async function getUserSingleSelectedIndex(list, title) {
   list.forEach((data, index) => {
     console.log(`${index + 1}. ${chalk.grey(data)}`);
   });
-  
+
   console.log("\n");
   const inputText = readlineSync.question("请输入选择（单选）: ");
   if (!inputText) {
