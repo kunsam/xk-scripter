@@ -52,10 +52,10 @@ export async function startDtAction() {
 
   let hasChanged = false;
   for await (let packageName of packages) {
-    const packageVersion = path.join(
+    const packageVersion = require(path.join(
       baseDir,
       `./packages/${packageName}/package.json`
-    );
+    )).version;
     if (dtWebDirJson.dependencies[`@xkool/${packageName}`] !== packageVersion) {
       if (!hasChanged) {
         hasChanged = true;
