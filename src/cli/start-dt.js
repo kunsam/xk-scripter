@@ -50,7 +50,7 @@ export async function startDtAction() {
 
   let dtWebDirJson = require(path.join(dtWebDir, "package.json"));
   //   const baseDirJson = require(path.join(baseDir, "package.json"));
-  console.log(baseDirJson, "dtWebDirJson 11");
+  console.log(dtWebDirJson, "dtWebDirJson 11");
   let hasChanged = false;
   for await (packageName of packages) {
     const packageVersion = path.join(
@@ -70,7 +70,7 @@ export async function startDtAction() {
       };
     }
   }
-  console.log(baseDirJson, "dtWebDirJson 22");
+  console.log(dtWebDirJson, "dtWebDirJson 22");
 
   if (hasChanged) {
     fs.writeFileSync(JSON.stringify(dtWebDirJson, null, 2));
