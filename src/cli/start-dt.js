@@ -95,7 +95,7 @@ export async function startDtAction() {
     );
   }
 
-  shellJsAsync("lerna bootstrap");
+  await shellJsAsync("lerna bootstrap");
 
   for await (let packageName of packages) {
     const pDir = path.join(baseDir, `packages/${packageName}`);
