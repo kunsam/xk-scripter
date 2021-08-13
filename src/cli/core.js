@@ -8,6 +8,7 @@ import {
 import chalk from "chalk";
 import { gcb, gcba, gco, gcoa, gsave, guse, gclear } from "xks-git";
 import shell from "shelljs";
+import { startDtAction } from "./start-dt";
 
 const program = new Command();
 
@@ -22,7 +23,6 @@ async function selectDirs(baseDir, dirs, title) {
     title
   );
   let selectedDirs = [];
-  console.log(title, selectedIndexes, "selectedIndexes");
   if (selectedIndexes.length) {
     selectedIndexes.forEach((indx) => {
       selectedDirs.push(allDirs[indx]);
@@ -193,6 +193,22 @@ program
       )
     );
   });
+
+program
+  .command("startDt")
+  .description("use selected featureId to restore git state correspondingly")
+  .action(() => {
+    console.log("123");
+    startDtAction()
+      .then(() => {
+        chalk.green("start success!");
+      })
+      .catch((e) => {
+        chalk.bgRedBright("start error!");
+        console.log(e);
+      });
+  });
+
 program.version(PACKAGE_VERSION, "-v, --vers", "output the current version");
 
 program.parse(process.argv);
