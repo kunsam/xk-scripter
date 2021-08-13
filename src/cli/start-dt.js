@@ -73,7 +73,10 @@ export async function startDtAction() {
   console.log(dtWebDirJson, "dtWebDirJson 22");
 
   if (hasChanged) {
-    fs.writeFileSync(JSON.stringify(dtWebDirJson, null, 2));
+    fs.writeFileSync(
+      path.join(dtWebDir, "package.json"),
+      JSON.stringify(dtWebDirJson, null, 2)
+    );
   }
 
   const baseDirLernaJson = require(path.join(baseDir, "lerna.json"));
@@ -84,6 +87,7 @@ export async function startDtAction() {
     baseDirLernaJson.packages[0] !== "packages/*"
   ) {
     fs.writeFileSync(
+      path.join(baseDir, "lerna.json"),
       JSON.stringify(
         {
           ...baseDirLernaJson,
