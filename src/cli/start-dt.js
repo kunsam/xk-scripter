@@ -52,7 +52,7 @@ export async function startDtAction() {
   //   const baseDirJson = require(path.join(baseDir, "package.json"));
   console.log(dtWebDirJson, "dtWebDirJson 11");
   let hasChanged = false;
-  for await (packageName of packages) {
+  for await (let packageName of packages) {
     const packageVersion = path.join(
       baseDir,
       `packages/${packageName}/package.json`
@@ -97,7 +97,7 @@ export async function startDtAction() {
 
   shellJsAsync("lerna bootstrap");
 
-  for await (packageName of packages) {
+  for await (let packageName of packages) {
     const pDir = path.join(baseDir, `packages/${packageName}`);
     await shellJsAsync(`cd packages/${packageName} && npm run build`);
   }
