@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import shell from "shelljs";
 import simpleGit from "simple-git";
 const os = require("os");
@@ -19,6 +20,7 @@ export async function startDtAction() {
   await git.pull([]);
 
   try {
+    chalk.bgGreen("lerna cleaning plz wait");
     await shellJsAsync("lerna clean --yes");
   } catch (error) {
     console.log(error, "error");
@@ -29,11 +31,11 @@ export async function startDtAction() {
   switch (os.platform()) {
     default:
     case "linux":
-      shellJsAsync("rm -rf node_modules");
+      await shellJsAsync("rm -rf node_modules");
       break;
 
     case "win32":
-      shellJsAsync("rmdir node_modules");
+      await shellJsAsync("rmdir node_modules");
       break;
   }
 
@@ -44,20 +46,35 @@ export async function startDtAction() {
   const dtWebDirGit = simpleGit(dtWebDir);
   await dtWebDirGit.pull([]);
 
+  const packages = ["api", "dt", "graphic", "ui", "utils"];
+
   let dtWebDirJson = require(path.join(dtWebDir, "package.json"));
-  const baseDirJson = require(path.join(baseDir, "package.json"));
-  dtWebDirJson = {
-    ...dtWebDirJson,
-    dependencies: {
-      ...dtWebDirJson.dependencies,
-      ["@xkool/api"]: baseDirJson.dependencies["@xkool/api"],
-      ["@xkool/dt"]: baseDirJson.dependencies["@xkool/dt"],
-      ["@xkool/graphic"]: baseDirJson.dependencies["@xkool/graphic"],
-      ["@xkool/ui"]: baseDirJson.dependencies["@xkool/ui"],
-      ["@xkool/utils"]: baseDirJson.dependencies["@xkool/utils"],
-    },
-  };
-  fs.writeFileSync(JSON.stringify(dtWebDirJson, null, 2));
+  //   const baseDirJson = require(path.join(baseDir, "package.json"));
+  console.log(baseDirJson, "dtWebDirJson 11");
+  let hasChanged = false;
+  for await (packageName of packages) {
+    const packageVersion = path.join(
+      baseDir,
+      `packages/${packageName}/package.json`
+    );
+    if (dtWebDirJson.dependencies[`@xkool/${packageName}`] !== packageVersion) {
+      if (!hasChanged) {
+        hasChanged = true;
+      }
+      dtWebDirJson = {
+        ...dtWebDirJson,
+        dependencies: {
+          ...dtWebDirJson.dependencies,
+          [`@xkool/${packageName}`]: packageVersion,
+        },
+      };
+    }
+  }
+  console.log(baseDirJson, "dtWebDirJson 22");
+
+  if (hasChanged) {
+    fs.writeFileSync(JSON.stringify(dtWebDirJson, null, 2));
+  }
 
   const baseDirLernaJson = require(path.join(baseDir, "lerna.json"));
   if (
@@ -79,8 +96,6 @@ export async function startDtAction() {
   }
 
   shellJsAsync("lerna bootstrap");
-
-  const packages = ["api", "dt", "graphic", "ui", "utils"];
 
   for await (packageName of packages) {
     const pDir = path.join(baseDir, `packages/${packageName}`);
