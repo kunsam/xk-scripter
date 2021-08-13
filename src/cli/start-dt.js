@@ -18,9 +18,14 @@ export async function startDtAction() {
   await git.checkout(["feature/integration"]);
   await git.pull([]);
 
-  await shellJsAsync("lerna clean");
+  try {
+    await shellJsAsync("lerna clean --yes");
+  } catch (error) {
+    console.log(error, "error");
+  }
 
   console.log("shellJsAsync shellJsAsync");
+
   switch (os.platform()) {
     default:
     case "linux":
