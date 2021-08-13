@@ -15,11 +15,12 @@ async function shellJsAsync(execStr) {
 export async function startDtAction() {
   const baseDir = shell.pwd().stdout;
   const git = simpleGit(baseDir);
-  await git.checkout(["dev"]);
+  await git.checkout(["feature/integration"]);
   await git.pull([]);
-  console.log("hahahha");
+
   await shellJsAsync("lerna clean");
 
+  console.log("shellJsAsync shellJsAsync");
   switch (os.platform()) {
     default:
     case "linux":

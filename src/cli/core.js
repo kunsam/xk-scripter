@@ -198,7 +198,6 @@ program
   .command("startDt")
   .description("use selected featureId to restore git state correspondingly")
   .action(() => {
-    console.log("123");
     startDtAction()
       .then(() => {
         chalk.green("start success!");
