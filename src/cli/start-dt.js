@@ -16,17 +16,15 @@ async function shellJsAsync(execStr) {
 export async function startDtAction() {
   const baseDir = shell.pwd().stdout;
   const git = simpleGit(baseDir);
-  await git.checkout(["feature/integration"]);
+  //   await git.checkout(["feature/integration"]);
   await git.pull([]);
 
   try {
-    chalk.bgGreen("lerna cleaning plz wait");
+    chalk.bgGreen("lerna cleaning start, plz wait!");
     await shellJsAsync("lerna clean --yes");
   } catch (error) {
     console.log(error, "error");
   }
-
-  console.log("shellJsAsync shellJsAsync");
 
   switch (os.platform()) {
     default:
@@ -70,8 +68,6 @@ export async function startDtAction() {
     }
   }
 
-  console.log(dtWebDir, "dtWebDir 11");
-  console.log(hasChanged, path.join(dtWebDir, "package.json"), "dtWebDir 22");
   if (hasChanged) {
     fs.writeFileSync(
       path.join(dtWebDir, "package.json"),
@@ -99,12 +95,13 @@ export async function startDtAction() {
     );
   }
 
+  chalk.bgGreen("lerna bootstrap start, plz wait!");
   await shellJsAsync("lerna bootstrap");
 
   for await (let packageName of packages) {
-    // const pDir = path.join(baseDir, `packages/${packageName}`);
     await shellJsAsync(`cd packages/${packageName} && npm run build`);
   }
 
-  await shellJsAsync(`cd packages/dt-web && npm run start`);
+  chalk.greenBright("All done! Now you can go to dt-web and run start!");
+  //   await shellJsAsync(`cd packages/dt-web && npm run start`);
 }
