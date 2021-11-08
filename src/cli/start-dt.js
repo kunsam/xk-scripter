@@ -32,6 +32,7 @@ export async function startDtAction() {
       await shellJsAsync("rm -rf node_modules");
       break;
 
+    // 这里有问题rmdir是 powershell的
     case "win32":
       await shellJsAsync("rmdir node_modules");
       break;
@@ -44,7 +45,7 @@ export async function startDtAction() {
   const dtWebDirGit = simpleGit(dtWebDir);
   await dtWebDirGit.pull([]);
 
-  const packages = ["api", "dt", "graphic", "ui", "utils"];
+  const packages = ["api", "dt", "graphic", "ui", "utils", "app-runner"];
 
   let dtWebDirJson = require(path.join(dtWebDir, "package.json"));
 
@@ -81,7 +82,6 @@ export async function startDtAction() {
     ) &&
     baseDirLernaJson.packages[0] !== "packages/*"
   ) {
-    console.log("write!!!!");
     fs.writeFileSync(
       path.join(baseDir, "./lerna.json"),
       JSON.stringify(

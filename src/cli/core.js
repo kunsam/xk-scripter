@@ -195,8 +195,8 @@ program
   });
 
 program
-  .command("startDt")
-  .description("use selected featureId to restore git state correspondingly")
+  .command("dt")
+  .description("run a new dt project!")
   .action(() => {
     startDtAction()
       .then(() => {
