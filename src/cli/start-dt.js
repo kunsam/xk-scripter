@@ -42,8 +42,8 @@ export async function startDtAction() {
   if (!fs.existsSync(dtWebDir)) {
     await git.clone(["git@git.xkool.org:xkool_plan/dt_frontend.git"]);
   }
-  const dtWebDirGit = simpleGit(dtWebDir);
-  await dtWebDirGit.pull([]);
+  // const dtWebDirGit = simpleGit(dtWebDir);
+  // await dtWebDirGit.pull([]);
 
   const packages = ["api", "dt", "graphic", "ui", "utils", "app-runner"];
 
