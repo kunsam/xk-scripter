@@ -95,12 +95,14 @@ export async function startDtAction() {
     );
   }
 
-  chalk.bgGreen("lerna bootstrap start, plz wait!");
+  // chalk.bgGreen("lerna bootstrap start, plz wait!");
   await shellJsAsync("lerna bootstrap");
 
-  for await (let packageName of packages) {
-    await shellJsAsync(`cd packages/${packageName} && npm run build`);
-  }
+  await shellJsAsync("npm run build:lib");
+
+  // for await (let packageName of packages) {
+  //   await shellJsAsync(`cd packages/${packageName} && npm run build`);
+  // }
 
   chalk.greenBright("All done! Now you can go to dt-web and run start!");
   //   await shellJsAsync(`cd packages/dt-web && npm run start`);
