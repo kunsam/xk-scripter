@@ -1,19 +1,19 @@
-
-const chalk = require('chalk')
-const readlineSync = require('readline-sync')
+const chalk = require("chalk");
+const readlineSync = require("readline-sync");
 
 export default function loopInput(question, condition) {
-  let result = null
-  loop()
+  let result = null;
+  loop();
   function loop() {
-    const input = readlineSync.question(chalk.yellow(`\n${question} `))
-    const valid = condition(input)
+    const input = readlineSync.question(chalk.yellow(`\n${question} `));
+    const valid = condition(input);
+    console.log(valid, "valid");
     if (!valid && valid !== 0) {
-      console.log('输入错误，请重新输入');
-      loop()
+      console.log("输入错误，请重新输入");
+      loop();
     } else {
-      result = valid
+      result = valid;
     }
   }
-  return result
+  return result;
 }
