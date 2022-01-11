@@ -30,7 +30,7 @@ function recursiveGetResult(clist: any[]) {
   });
   if (clist[chosenIndex]) {
     if (clist[chosenIndex].link) {
-      console.log(clist[chosenIndex].link);
+      console.log(`文档地址：${clist[chosenIndex].link}`);
     } else if (clist[chosenIndex].children) {
       recursiveGetResult(clist[chosenIndex].children);
     }
@@ -54,7 +54,7 @@ program
       });
       if (DTDOC_LINK[chosenIndex]) {
         if (DTDOC_LINK[chosenIndex].link) {
-          console.log(DTDOC_LINK[chosenIndex].link);
+          console.log(`文档地址：${DTDOC_LINK[chosenIndex].link}`);
         } else if (DTDOC_LINK[chosenIndex].children) {
           recursiveGetResult(DTDOC_LINK[chosenIndex].children);
         }
@@ -77,5 +77,3 @@ program
         console.log(e);
       });
   });
-
-program.parse(process.argv);
