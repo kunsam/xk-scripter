@@ -198,7 +198,7 @@ program
 
 function recursiveGetResult(clist) {
   clist.forEach((target, index) => {
-    console.log(chalk.white(`${index + 1}. ${target}`));
+    console.log(chalk.white(`${index + 1}. ${target.name}`));
   });
   const chosenIndex = loopInput("请选择：", (input) => {
     const choose = input && parseInt(input);
@@ -219,7 +219,7 @@ program
   .action(() => {
     console.log(chalk.magenta(`\n-- [文档列表]:`));
     DTDOC_LINK.forEach((target, index) => {
-      console.log(chalk.white(`${index + 1}. ${target}`));
+      console.log(chalk.white(`${index + 1}. ${target.name}`));
     });
     const chosenIndex = loopInput("请选择：", (input) => {
       const choose = input && parseInt(input);
