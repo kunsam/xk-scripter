@@ -1,6 +1,6 @@
 {
   "name": "xk-scripter",
-  "version": "0.0.29",
+  "version": "0.0.30",
   "description": "",
   "main": "lib/index.js",
   "engine": {
