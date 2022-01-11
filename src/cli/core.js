@@ -10,7 +10,7 @@ import { gcb, gcba, gco, gcoa, gsave, guse, gclear } from "xks-git";
 import shell from "shelljs";
 import { startDtAction } from "./start-dt";
 import { DTDOC_LINK } from "../dtdoc.config";
-import { loopInput } from "../app/src/loopInput";
+import loopInput from "../app/src/loopInput";
 
 const program = new Command();
 
