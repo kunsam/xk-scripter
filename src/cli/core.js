@@ -216,23 +216,26 @@ function recursiveGetResult(clist) {
 program
   .command("dtdoc")
   .description("show dt develop doc")
-  .action(() => {
+  .action(async () => {
     console.log(chalk.magenta(`\n-- [文档列表]:`));
     DTDOC_LINK.forEach((target, index) => {
       console.log(chalk.white(`${index + 1}. ${target.name}`));
     });
-    const chosenIndex = loopInput("请选择：", (input) => {
-      const choose = input && parseInt(input);
-      if (choose && choose > 0 && choose <= DTDOC_LINK.length)
-        return choose - 1;
-    });
-    if (DTDOC_LINK[chosenIndex]) {
-      if (DTDOC_LINK[chosenIndex].link) {
-        chalk.green(DTDOC_LINK[chosenIndex].link);
-      } else if (DTDOC_LINK[chosenIndex].children) {
-        recursiveGetResult(DTDOC_LINK[chosenIndex].children);
-      }
-    }
+    const ret = await program.parseAsync(process.argv);
+    // program.parse(process.argv);
+    console.log(program.args, ret, "program");
+    // const chosenIndex = loopInput("请选择：", (input) => {
+    //   const choose = input && parseInt(input);
+    //   if (choose && choose > 0 && choose <= DTDOC_LINK.length)
+    //     return choose - 1;
+    // });
+    // if (DTDOC_LINK[chosenIndex]) {
+    //   if (DTDOC_LINK[chosenIndex].link) {
+    //     chalk.green(DTDOC_LINK[chosenIndex].link);
+    //   } else if (DTDOC_LINK[chosenIndex].children) {
+    //     recursiveGetResult(DTDOC_LINK[chosenIndex].children);
+    //   }
+    // }
   });
 
 program
