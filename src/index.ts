@@ -30,7 +30,7 @@ function recursiveGetResult(clist: any[]) {
   });
   if (clist[chosenIndex]) {
     if (clist[chosenIndex].link) {
-      chalk.green(clist[chosenIndex].link);
+      console.log(clist[chosenIndex].link);
     } else if (clist[chosenIndex].children) {
       recursiveGetResult(clist[chosenIndex].children);
     }
@@ -52,10 +52,9 @@ program
         if (choose && choose > 0 && choose <= DTDOC_LINK.length)
           return choose - 1;
       });
-      console.log(chosenIndex, "chosenIndex");
       if (DTDOC_LINK[chosenIndex]) {
         if (DTDOC_LINK[chosenIndex].link) {
-          chalk.green(DTDOC_LINK[chosenIndex].link);
+          console.log(DTDOC_LINK[chosenIndex].link);
         } else if (DTDOC_LINK[chosenIndex].children) {
           recursiveGetResult(DTDOC_LINK[chosenIndex].children);
         }
