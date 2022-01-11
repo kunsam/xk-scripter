@@ -1,8 +1,5 @@
-import * as path from "path";
 import { Command } from "commander";
-
 import chalk from "chalk";
-
 import { DTDOC_LINK } from "./dtdoc.config";
 import loopInput from "./loopInput";
 import { startDtAction } from "./start-dt";
@@ -59,6 +56,9 @@ program
           recursiveGetResult(DTDOC_LINK[chosenIndex].children);
         }
       }
+
+      // 解决报错
+      loopInput("OK", () => false);
     } catch (e) {
       console.log(e, "wanring!");
     }
@@ -77,3 +77,5 @@ program
         console.log(e);
       });
   });
+
+program.parse(process.argv);
