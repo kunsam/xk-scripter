@@ -40,22 +40,28 @@ function recursiveGetResult(clist: any[]) {
 program
   .command("dtdoc")
   .description("show dt develop doc")
-  .action(async () => {
+  .action(() => {
     console.log(chalk.magenta(`\n-- [文档列表]:`));
     DTDOC_LINK.forEach((target: any, index: number) => {
       console.log(chalk.white(`${index + 1}. ${target.name}`));
     });
-    const chosenIndex = loopInput("请选择：", (input: any) => {
-      const choose = input && parseInt(input);
-      if (choose && choose > 0 && choose <= DTDOC_LINK.length)
-        return choose - 1;
-    });
-    if (DTDOC_LINK[chosenIndex]) {
-      if (DTDOC_LINK[chosenIndex].link) {
-        chalk.green(DTDOC_LINK[chosenIndex].link);
-      } else if (DTDOC_LINK[chosenIndex].children) {
-        recursiveGetResult(DTDOC_LINK[chosenIndex].children);
+
+    try {
+      const chosenIndex = loopInput("请选择：", (input: any) => {
+        const choose = input && parseInt(input);
+        if (choose && choose > 0 && choose <= DTDOC_LINK.length)
+          return choose - 1;
+      });
+      console.log(chosenIndex, "chosenIndex");
+      if (DTDOC_LINK[chosenIndex]) {
+        if (DTDOC_LINK[chosenIndex].link) {
+          chalk.green(DTDOC_LINK[chosenIndex].link);
+        } else if (DTDOC_LINK[chosenIndex].children) {
+          recursiveGetResult(DTDOC_LINK[chosenIndex].children);
+        }
       }
+    } catch (e) {
+      console.log(e, "wanring!");
     }
   });
 

@@ -7,7 +7,6 @@ export default function loopInput(question: string, condition: any): any {
   function loop() {
     const input = readlineSync.question(chalk.yellow(`\n${question} `));
     const valid = condition(input);
-    console.log(valid, "valid");
     if (!valid && valid !== 0) {
       console.log("输入错误，请重新输入");
       loop();
