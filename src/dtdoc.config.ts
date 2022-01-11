@@ -1,4 +1,4 @@
-export const DTDOC_LINK = [
+export const DTDOC_LINK: any[] = [
   {
     name: "单体技术开发文档(总入口）",
     link: "https://wiki.xkool.org/pages/viewpage.action?pageId=100534143",
