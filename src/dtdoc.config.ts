@@ -16,8 +16,20 @@ export const DTDOC_LINK: any[] = [
     link: "https://wiki.xkool.org/pages/viewpage.action?pageId=100534189",
   },
   {
-    name: "业务文档",
+    name: "对象层级文档(通用功能文档）",
+    link: "https://wiki.xkool.org/pages/viewpage.action?pageId=100534592",
+  },
+  {
+    name: "对象查询文档(通用功能文档）",
+    link: "https://wiki.xkool.org/pages/viewpage.action?pageId=100535098",
+  },
+  {
+    name: "【查看业务文档】",
     children: [
+      {
+        name: "[wall] 墙相关文档",
+        link: "https://wiki.xkool.org/pages/viewpage.action?pageId=100535087",
+      },
       {
         name: "标注业务",
         link: "https://wiki.xkool.org/pages/viewpage.action?pageId=100534388",
