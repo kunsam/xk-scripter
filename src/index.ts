@@ -3,6 +3,8 @@ import chalk from "chalk";
 import { DTDOC_LINK } from "./dtdoc.config";
 import loopInput from "./loopInput";
 import { startDtAction } from "./start-dt";
+import * as fs from "fs";
+import { createDOFromDTO } from "./gele/createDOfromDTO";
 
 const program = new Command();
 
@@ -76,6 +78,19 @@ program
         chalk.bgRedBright("start error!");
         console.log(e);
       });
+  });
+
+program
+  .command("jdo")
+  .description("create ts file from java code")
+  .action(() => {
+    if (!fs.existsSync(`java.ts`)) {
+      chalk.red("java.ts Not Exist!");
+      return;
+    }
+    const file = fs.readFileSync("java.ts").toString();
+    createDOFromDTO(file);
+    chalk.green("jdo end!");
   });
 
 program.parse(process.argv);
