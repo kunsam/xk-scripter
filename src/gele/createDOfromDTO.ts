@@ -1,82 +1,7 @@
 import * as ts from "typescript";
 import * as fs from "fs";
-
-const test = `
-public class StepComponentDTO extends BaseHatchDTO {
-
-    /** 台阶类型 */
-    private StepComponentType stepType;
-
-    /** 台阶长(台阶矩形上下的边长) */
-    private double length;
-
-    /** 是否有平台 */
-    private boolean hasPlatform;
-
-    /** 平台宽(台阶矩形左右的边长) */
-    private double platformWidth;
-
-    /** 踏步宽 */
-    private double stepWidth;
-
-    /** 踏步高 */
-    private double stepHeight;
-
-    /** 踏步数 */
-    private double stepNum;
-
-    /** 台阶高度 */
-    private double selfHeight;
-
-    /** 台阶顶离地高度 */
-    private double groundClearance;
-
-    /** 栏杆位置 */
-    private List<RectEdgePosition> railingPositions;
-
-    /** 栏杆配置 */
-    private RailingParamsDTO railingParams;
-}
-
-public enum StepComponentType {
-    /** 单侧，必定为下 */
-    SINGLE = '123',
-    /** 双侧相邻，必定为下、右 */
-    CLOSED_SIDES = 2,
-    /** 双侧对边，必定为左、右 */
-    OPPOSITE_SIDES = 3,
-    /** 三侧，必定为左、下、右 */
-    THREE_SIDES = 4;
-}
-
-/**
- * 栏杆
- */
-public class RailingParamsDTO {
-
-  /** 栏杆高度 （栏杆高度 + 反坎高度 = 总高度） */
-  private double railingHeight;
-
-  /** 反坎高度 */
-  private double baseRailHeight;
-
-  /** 栏杆后端 */
-  private double railingThickness;
-}
-
-`;
-
-interface BasicProps {
-  name: string;
-  type: string;
-  comment: string;
-}
-
-interface BasicEnum {
-  name: string;
-  value: string;
-  comment: string;
-}
+import chalk from "chalk";
+import { BasicEnum, BasicProps, IInterfacePropsArgs } from "./typing";
 
 function getEnum(enumName: string, enums: BasicEnum[]) {
   return `
@@ -92,20 +17,16 @@ export enum ${enumName} {
 `;
 }
 
-interface IInterfacePropsArgs {
-  name: string;
-  refers: string[];
-  heritageClause?: string;
-  basicProps: BasicProps[];
-}
-
 function transJavaType(type: string) {
   switch (type) {
+    case "integer":
+    case "float":
+    case "long":
     case "double": {
       return "number";
     }
     default: {
-      return type;
+      return type.replace("DTO", "DO");
     }
   }
 }
@@ -271,8 +192,41 @@ function resolveClassDeclaration(
       return;
     }
   });
-  args.basicProps = basicProps;
+  args.name = args.name.replace("DTO", "DO");
+  args.basicProps = basicProps.map((p) => ({
+    ...p,
+    type: transJavaType(p.type),
+  }));
   return args;
+}
+
+function preProcessSourceFile(sourceFile: ts.SourceFile) {
+  let text: string = "";
+  let prevOccurEnum = false;
+  ts.forEachChild(sourceFile, (node) => {
+    let nodeText = node.getText(sourceFile);
+    // console.log(node.kind, "node");
+    // console.log(node.getText(sourceFile), "preProcessSourceFile");
+
+    if (node.kind === ts.SyntaxKind.EnumDeclaration) {
+      nodeText = nodeText.replace("public ", "");
+      prevOccurEnum = true;
+      text += `\n${nodeText}`;
+      return;
+    }
+
+    if (prevOccurEnum) {
+      if (node.kind === ts.SyntaxKind.Block) {
+        nodeText = nodeText.replace(/\(/g, " = ");
+        nodeText = nodeText.replace(/\)/g, "");
+        prevOccurEnum = false;
+      } else {
+        nodeText = "";
+      }
+    }
+    text += nodeText;
+  });
+  return text;
 }
 
 export function createDOFromDTO(fileContent: string) {
@@ -284,8 +238,14 @@ export function createDOFromDTO(fileContent: string) {
     const interfacesArgs: IInterfacePropsArgs[] = [];
     let code: string = "";
 
-    const program = ts.createProgram({ rootNames: [tempPath], options: {} });
-    const sourceFile = program.getSourceFile(tempPath);
+    let program = ts.createProgram({ rootNames: [tempPath], options: {} });
+    let sourceFile = program.getSourceFile(tempPath);
+
+    const processedFileText = preProcessSourceFile(sourceFile);
+    fs.writeFileSync(tempPath, processedFileText);
+    program = ts.createProgram({ rootNames: [tempPath], options: {} });
+    sourceFile = program.getSourceFile(tempPath);
+
     ts.forEachChild(sourceFile, (node) => {
       if (ts.isClassDeclaration(node)) {
         const args = resolveClassDeclaration(node, sourceFile);
@@ -331,8 +291,9 @@ export function createDOFromDTO(fileContent: string) {
       }
     });
     // console.log(code, "code");
-    fs.writeFileSync(targetPath, `/** 本代码由小库前端ai生成 */${code}`);
+    // fs.writeFileSync(targetPath, );
     fs.unlinkSync(tempPath);
+    return { code: `/** 本代码由小库前端ai生成 */${code}`, interfacesArgs };
   } catch (e) {
     console.log(e, "error");
     fs.unlinkSync(tempPath);
@@ -340,4 +301,15 @@ export function createDOFromDTO(fileContent: string) {
   }
 }
 
-// createDOFromDTO(test);
+export function createDOFromDTOCommand(javadtoFielPath: string): {
+  code: string;
+  interfacesArgs: IInterfacePropsArgs[];
+} {
+  if (!fs.existsSync(javadtoFielPath)) {
+    chalk.red(`${javadtoFielPath} Not Exist!`);
+    return;
+  }
+  const file = fs.readFileSync(javadtoFielPath).toString();
+  chalk.green("jdo end!");
+  return createDOFromDTO(file);
+}
